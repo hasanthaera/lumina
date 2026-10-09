@@ -385,12 +385,18 @@ const serviceSlugs = site.services.map((s) => s.slug);
     color: var(--color-muted);
   }
 
+  .field input:hover,
+  .field select:hover,
+  .field textarea:hover {
+    border-color: var(--color-brand);
+  }
+
   .field input,
   .field select,
   .field textarea {
     width: 100%;
     padding: var(--space-3);
-    border: 2px solid var(--color-muted);
+    border: 2px solid var(--color-border-strong);
     border-radius: var(--radius);
     background: var(--color-bg);
     color: var(--color-text);

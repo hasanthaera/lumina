@@ -47,15 +47,23 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     flex-direction: column;
     padding: var(--space-5);
     border: 1px solid var(--color-border);
+    border-top: 4px solid var(--color-accent);
     border-radius: var(--radius);
     background: var(--color-bg);
+    box-shadow: 0 1px 3px rgb(0 27 89 / 0.08);
   }
 
   .service-card:hover {
     border-color: var(--color-brand);
+    border-top-color: var(--color-accent);
+    box-shadow: 0 6px 16px rgb(0 27 89 / 0.12);
   }
 
   /* Whole card is clickable through the title link; focus ring stays on the card. */
+  .service-card__title a {
+    color: var(--color-brand);
+  }
+
   .service-card__title a::after {
     content: '';
     position: absolute;
@@ -78,7 +86,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
   }
 
   .service-card__more {
-    font-weight: 600;
-    color: var(--color-brand);
+    font-weight: 700;
+    color: var(--color-accent-text);
   }
 </style>

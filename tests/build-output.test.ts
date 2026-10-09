@@ -107,7 +107,7 @@ describe.skipIf(!built)('built site', () => {
     const data = JSON.parse(raw!);
     expect(data['@context']).toBe('https://schema.org');
     expect(data['@type']).toBe('LocalBusiness');
-    expect(data.name).toBe(site.name);
+    expect(data.name).toBe(site.fullName);
     expect(data.telephone).toBe(site.phoneHref);
     expect(data.url).toBe(`${site.url}/`);
     expect(data.hasOfferCatalog.itemListElement).toHaveLength(site.services.length);

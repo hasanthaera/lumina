@@ -8,7 +8,8 @@ const description = `${site.name} provides landscaping, handyman and paving / de
 const localBusiness = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  name: site.name,
+  name: site.fullName,
+  logo: `${site.url}/logo.png`,
   description: site.tagline,
   url: `${site.url}/`,
   telephone: site.phoneHref,
@@ -39,26 +40,26 @@ const jsonLd = JSON.stringify(localBusiness).replace(/</g, '\\u003c');
     <div class="container">
       <h1>{site.tagline}</h1>
       <p class="lead">
-        {site.name} is a local, owner-operated business helping homeowners with their gardens,
+        {site.fullName} is a local, owner-operated business helping homeowners with their gardens,
         odd jobs and outdoor living spaces. Friendly, reliable and tidy, with honest quotes up front.
       </p>
       <p class="hero__actions">
         <a class="button" href="/contact/">Get a quote</a>
-        <a class="button button--secondary" href={`tel:${site.phoneHref}`}>Call {site.phone}</a>
+        <a class="button button--secondary button--on-dark" href={`tel:${site.phoneHref}`}>Call {site.phone}</a>
       </p>
     </div>
   </section>
 
   <section class="section section--surface" aria-labelledby="services-heading">
     <div class="container">
-      <h2 id="services-heading">What we do</h2>
+      <h2 id="services-heading" class="heading-accent">What we do</h2>
       <ServiceCards headingLevel={3} />
     </div>
   </section>
 
   <section class="section" aria-labelledby="why-heading">
     <div class="container">
-      <h2 id="why-heading">Why choose {site.name}</h2>
+      <h2 id="why-heading" class="heading-accent">Why choose {site.name}</h2>
       <ul class="reasons">
         <li><strong>Clear quotes.</strong> You know the price before any work starts.</li>
         <li><strong>On time.</strong> We turn up when we say we will and keep you updated.</li>
@@ -71,13 +72,23 @@ const jsonLd = JSON.stringify(localBusiness).replace(/</g, '\\u003c');
 </BaseLayout>
 
 <style>
+  /* Navy hero with a soft sun glow, from the logo. */
   .hero {
     padding-block: var(--space-8);
-    background: linear-gradient(180deg, var(--color-surface), var(--color-bg));
+    background:
+      radial-gradient(circle at 100% 0%, rgb(254 158 11 / 0.28), transparent 45%),
+      var(--color-brand);
+    color: var(--color-footer-text);
+    --color-focus: var(--color-focus-dark);
   }
 
   .hero h1 {
     max-width: 22ch;
+    color: var(--color-on-brand);
+  }
+
+  .hero .lead {
+    color: var(--color-footer-text);
   }
 
   .hero__actions {
@@ -88,11 +99,25 @@ const jsonLd = JSON.stringify(localBusiness).replace(/</g, '\\u003c');
   }
 
   .reasons {
-    padding-left: var(--space-5);
+    list-style: none;
+    padding-left: 0;
     max-width: 40rem;
   }
 
   .reasons li {
-    margin-bottom: var(--space-2);
+    position: relative;
+    margin-bottom: var(--space-3);
+    padding-left: var(--space-5);
+  }
+
+  .reasons li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--color-accent);
   }
 </style>

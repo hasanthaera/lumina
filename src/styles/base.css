@@ -1,3 +1,4 @@
+@import '@fontsource-variable/montserrat/wght.css';
 @import './tokens.css';
 
 *,
@@ -31,8 +32,23 @@ main {
 h1,
 h2,
 h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
   line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  color: var(--color-brand);
   margin: 0 0 var(--space-4);
+}
+
+/* Short orange rule under section headings, echoing the logo's sun. */
+.heading-accent::after {
+  content: '';
+  display: block;
+  width: 3rem;
+  height: 4px;
+  margin-top: var(--space-3);
+  border-radius: 2px;
+  background: var(--color-accent);
 }
 
 h1 {
@@ -87,29 +103,45 @@ a:hover {
   background: var(--color-surface);
 }
 
+/* Navy band for calls to action. */
+.section--brand {
+  background: var(--color-brand);
+  color: var(--color-footer-text);
+  --color-focus: var(--color-focus-dark);
+}
+
+.section--brand h2 {
+  color: var(--color-on-brand);
+}
+
+.section--brand a:not(.button) {
+  color: var(--color-footer-link);
+}
+
 .lead {
   font-size: var(--text-lg);
   color: var(--color-muted);
   max-width: 40rem;
 }
 
+/* Primary call to action: logo orange with navy text. */
 .button {
   display: inline-block;
   padding: var(--space-3) var(--space-5);
-  border: 2px solid var(--color-brand);
+  border: 2px solid var(--color-accent);
   border-radius: var(--radius);
-  background: var(--color-brand);
-  color: var(--color-on-brand);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
   font: inherit;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   cursor: pointer;
 }
 
 .button:hover {
-  background: var(--color-brand-hover);
-  border-color: var(--color-brand-hover);
-  color: var(--color-on-brand);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: var(--color-on-accent);
 }
 
 .button[disabled] {
@@ -119,12 +151,25 @@ a:hover {
 
 .button--secondary {
   background: transparent;
+  border-color: var(--color-brand);
   color: var(--color-brand);
 }
 
 .button--secondary:hover {
-  background: var(--color-surface);
-  color: var(--color-brand-hover);
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: var(--color-on-brand);
+}
+
+/* On navy backgrounds. */
+.button--on-dark.button--secondary {
+  border-color: var(--color-on-brand);
+  color: var(--color-on-brand);
+}
+
+.button--on-dark.button--secondary:hover {
+  background: var(--color-on-brand);
+  color: var(--color-brand);
 }
 
 .skip-link {

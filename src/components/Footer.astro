@@ -8,7 +8,7 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="container site-footer__inner">
     <div>
-      <p class="site-footer__name">{site.name}</p>
+      <p class="site-footer__name">{site.fullName}</p>
       <p>{site.tagline}</p>
     </div>
     <ul class="site-footer__contact">
@@ -16,7 +16,7 @@ const year = new Date().getFullYear();
       <li>Email: <a href={`mailto:${site.displayEmail}`}>{site.displayEmail}</a></li>
       <li>Service area: {site.serviceArea}</li>
     </ul>
-    <p class="site-footer__legal">&copy; {year} {site.name}. All rights reserved.</p>
+    <p class="site-footer__legal">&copy; {year} {site.fullName}. All rights reserved.</p>
   </div>
 </footer>
 
@@ -25,6 +25,7 @@ const year = new Date().getFullYear();
     background: var(--color-footer-bg);
     color: var(--color-footer-text);
     padding-block: var(--space-6);
+    border-top: 4px solid var(--color-accent);
     --color-focus: var(--color-focus-dark);
   }
 
@@ -42,8 +43,11 @@ const year = new Date().getFullYear();
   }
 
   .site-footer__name {
+    font-family: var(--font-heading);
     font-size: var(--text-lg);
     font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     margin-bottom: var(--space-1);
   }
 

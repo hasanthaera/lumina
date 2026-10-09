@@ -16,7 +16,10 @@ export interface Service {
 }
 
 export const site = {
+  /** Short name, used in page titles. */
   name: 'Lumina',
+  /** Full trading name, as on the logo. */
+  fullName: 'Lumina Property Services',
   tagline: 'Landscaping, handyman and paving work, done properly.',
   /** Canonical origin, no trailing slash. PLACEHOLDER until the domain is known. */
   url: 'https://lumina.example',

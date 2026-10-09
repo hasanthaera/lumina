@@ -1,47 +1,60 @@
 /*
- * Design tokens. Brand colours are placeholders until Lumina supplies its own.
+ * Design tokens. Brand colours come from the Lumina Property Services logo:
+ * navy #001b59 and sun orange #fe9e0b.
  *
  * WCAG contrast ratios (computed, AA needs 4.5:1 for text, 3:1 for focus/UI):
- *   --color-text        on --color-bg            15.54:1
- *   --color-text        on --color-surface       14.16:1
- *   --color-muted       on --color-bg             7.56:1
- *   --color-muted       on --color-surface        6.89:1
- *   --color-brand       on --color-bg             6.48:1  (links)
- *   --color-brand       on --color-surface        5.90:1
- *   --color-on-brand    on --color-brand          6.48:1  (buttons)
- *   --color-on-brand    on --color-brand-hover    9.07:1
- *   --color-footer-text on --color-footer-bg     13.22:1
- *   --color-footer-link on --color-footer-bg      9.49:1
- *   --color-error       on --color-bg             6.54:1
- *   --color-error-text  on --color-error-bg       7.84:1
- *   --color-success-text on --color-success-bg   7.61:1
- *   --color-focus       vs --color-bg             5.02:1
- *   --color-focus       vs --color-surface        4.57:1
- *   --color-focus-dark  vs --color-footer-bg      7.24:1
+ *   --color-text         on --color-bg            15.97:1
+ *   --color-text         on --color-surface       14.64:1
+ *   --color-muted        on --color-bg             7.40:1
+ *   --color-muted        on --color-surface        6.78:1
+ *   --color-brand        on --color-bg            16.14:1  (links)
+ *   --color-brand        on --color-surface       14.80:1
+ *   --color-on-brand     on --color-brand         16.14:1  (navy buttons)
+ *   --color-on-brand     on --color-brand-hover   12.46:1
+ *   --color-on-accent    on --color-accent         7.77:1  (orange buttons)
+ *   --color-on-accent    on --color-accent-hover   9.17:1
+ *   --color-accent-text  on --color-bg             5.09:1  (orange-ish text)
+ *   --color-footer-text  on --color-footer-bg     13.40:1
+ *   --color-footer-link  on --color-footer-bg      7.77:1
+ *   --color-error        on --color-bg             6.54:1
+ *   --color-error-text   on --color-error-bg       7.84:1
+ *   --color-success-text on --color-success-bg   13.05:1
+ *   --color-focus        vs --color-bg             4.29:1
+ *   --color-focus        vs --color-surface        3.93:1
+ *   --color-focus-dark   vs --color-footer-bg      7.77:1
+ *   --color-border-strong vs --color-bg            3.06:1  (form field borders)
+ * --color-accent itself is only 2.08:1 on white, so it is used for fills and
+ * decoration, never for text on light backgrounds.
  * The focus outline is offset from the element so it is drawn against the
- * surrounding background, never against a brand-coloured button.
+ * surrounding background, never against a coloured button.
  */
 :root {
   --color-bg: #ffffff;
-  --color-surface: #f3f5f0;
-  --color-border: #c9d1c6;
-  --color-text: #1d2621;
-  --color-muted: #4b5750;
-  --color-brand: #2d6a3e;
-  --color-brand-hover: #22522f;
+  --color-surface: #f3f5fa;
+  --color-border: #d3d9e6;
+  --color-border-strong: #8a93ad;
+  --color-text: #14213d;
+  --color-muted: #4a5573;
+  --color-brand: #001b59;
+  --color-brand-hover: #0b2e7a;
   --color-on-brand: #ffffff;
-  --color-footer-bg: #1d2621;
-  --color-footer-text: #e9eee8;
-  --color-footer-link: #a8d5b2;
+  --color-accent: #fe9e0b;
+  --color-accent-hover: #ffb53d;
+  --color-on-accent: #001b59;
+  --color-accent-text: #a85a00;
+  --color-footer-bg: #001b59;
+  --color-footer-text: #e6eaf3;
+  --color-footer-link: #fe9e0b;
   --color-error: #b3261e;
   --color-error-text: #8c1d18;
   --color-error-bg: #fbeaea;
-  --color-success-text: #1e5530;
-  --color-success-bg: #e6f2e9;
-  --color-focus: #b45309;
-  --color-focus-dark: #f59e0b;
+  --color-success-text: #00205f;
+  --color-success-bg: #e8edf8;
+  --color-focus: #c25e00;
+  --color-focus-dark: #fe9e0b;
 
   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-heading: 'Montserrat Variable', var(--font-body);
 
   /* Type scale (~1.25 ratio) */
   --text-sm: 0.875rem;
