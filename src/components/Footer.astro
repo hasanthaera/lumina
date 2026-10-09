@@ -1,0 +1,74 @@
+---
+import { site } from '../config/site';
+
+// Build-time year; Cloudflare Pages rebuilds on every deploy.
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <p class="site-footer__name">{site.name}</p>
+      <p>{site.tagline}</p>
+    </div>
+    <ul class="site-footer__contact">
+      <li>Phone: <a href={`tel:${site.phoneHref}`}>{site.phone}</a></li>
+      <li>Email: <a href={`mailto:${site.displayEmail}`}>{site.displayEmail}</a></li>
+      <li>Service area: {site.serviceArea}</li>
+    </ul>
+    <p class="site-footer__legal">&copy; {year} {site.name}. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-footer-bg);
+    color: var(--color-footer-text);
+    padding-block: var(--space-6);
+    --color-focus: var(--color-focus-dark);
+  }
+
+  .site-footer a {
+    color: var(--color-footer-link);
+  }
+
+  .site-footer a:hover {
+    color: var(--color-footer-text);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .site-footer__name {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-1);
+  }
+
+  .site-footer__contact {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .site-footer__contact li {
+    padding-block: var(--space-1);
+  }
+
+  .site-footer__legal {
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+
+  @media (min-width: 48rem) {
+    .site-footer__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .site-footer__legal {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

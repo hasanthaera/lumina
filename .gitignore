@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.dev.vars
+.env
+
+# Empty clone of the GitHub repo; this folder is the real working copy.
+lumina/

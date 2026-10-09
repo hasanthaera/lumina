@@ -1,0 +1,70 @@
+/*
+ * Design tokens. Brand colours are placeholders until Lumina supplies its own.
+ *
+ * WCAG contrast ratios (computed, AA needs 4.5:1 for text, 3:1 for focus/UI):
+ *   --color-text        on --color-bg            15.54:1
+ *   --color-text        on --color-surface       14.16:1
+ *   --color-muted       on --color-bg             7.56:1
+ *   --color-muted       on --color-surface        6.89:1
+ *   --color-brand       on --color-bg             6.48:1  (links)
+ *   --color-brand       on --color-surface        5.90:1
+ *   --color-on-brand    on --color-brand          6.48:1  (buttons)
+ *   --color-on-brand    on --color-brand-hover    9.07:1
+ *   --color-footer-text on --color-footer-bg     13.22:1
+ *   --color-footer-link on --color-footer-bg      9.49:1
+ *   --color-error       on --color-bg             6.54:1
+ *   --color-error-text  on --color-error-bg       7.84:1
+ *   --color-success-text on --color-success-bg   7.61:1
+ *   --color-focus       vs --color-bg             5.02:1
+ *   --color-focus       vs --color-surface        4.57:1
+ *   --color-focus-dark  vs --color-footer-bg      7.24:1
+ * The focus outline is offset from the element so it is drawn against the
+ * surrounding background, never against a brand-coloured button.
+ */
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f3f5f0;
+  --color-border: #c9d1c6;
+  --color-text: #1d2621;
+  --color-muted: #4b5750;
+  --color-brand: #2d6a3e;
+  --color-brand-hover: #22522f;
+  --color-on-brand: #ffffff;
+  --color-footer-bg: #1d2621;
+  --color-footer-text: #e9eee8;
+  --color-footer-link: #a8d5b2;
+  --color-error: #b3261e;
+  --color-error-text: #8c1d18;
+  --color-error-bg: #fbeaea;
+  --color-success-text: #1e5530;
+  --color-success-bg: #e6f2e9;
+  --color-focus: #b45309;
+  --color-focus-dark: #f59e0b;
+
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Type scale (~1.25 ratio) */
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5625rem;
+  --text-2xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.25rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.4vw, 3rem);
+  --leading: 1.6;
+  --leading-tight: 1.2;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  --radius: 0.5rem;
+  --max-width: 72rem;
+  --focus-ring: 3px solid var(--color-focus);
+  --focus-offset: 3px;
+}

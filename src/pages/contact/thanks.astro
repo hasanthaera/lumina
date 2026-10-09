@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../config/site';
+---
+
+<BaseLayout
+  title="Thank you"
+  description={`Thank you for contacting ${site.name}.`}
+  noindex
+>
+  <section class="section">
+    <div class="container">
+      <h1>Thank you, your enquiry has been sent</h1>
+      <p class="lead">We will be in touch soon.</p>
+      <p>
+        If your job is urgent, call us on <a href={`tel:${site.phoneHref}`}>{site.phone}</a>.
+      </p>
+      <p><a href="/">Back to the Home page</a></p>
+    </div>
+  </section>
+</BaseLayout>

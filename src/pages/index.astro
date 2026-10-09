@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import { site } from '../config/site';
+
+const description = `${site.name} provides landscaping, handyman and paving / decking services across ${site.serviceArea.toLowerCase()}. Get a free quote today.`;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.name,
+  description: site.tagline,
+  url: `${site.url}/`,
+  telephone: site.phoneHref,
+  email: site.displayEmail,
+  areaServed: site.serviceArea,
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Services',
+    itemListElement: site.services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: s.label,
+        description: s.summary,
+        url: `${site.url}/services/${s.slug}/`,
+      },
+    })),
+  },
+};
+// Escape "<" so no string value can close the script element.
+const jsonLd = JSON.stringify(localBusiness).replace(/</g, '\\u003c');
+---
+
+<BaseLayout description={description}>
+  <script slot="head" type="application/ld+json" set:html={jsonLd} />
+
+  <section class="hero">
+    <div class="container">
+      <h1>{site.tagline}</h1>
+      <p class="lead">
+        {site.name} is a local, owner-operated business helping homeowners with their gardens,
+        odd jobs and outdoor living spaces. Friendly, reliable and tidy, with honest quotes up front.
+      </p>
+      <p class="hero__actions">
+        <a class="button" href="/contact/">Get a quote</a>
+        <a class="button button--secondary" href={`tel:${site.phoneHref}`}>Call {site.phone}</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--surface" aria-labelledby="services-heading">
+    <div class="container">
+      <h2 id="services-heading">What we do</h2>
+      <ServiceCards headingLevel={3} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="why-heading">
+    <div class="container">
+      <h2 id="why-heading">Why choose {site.name}</h2>
+      <ul class="reasons">
+        <li><strong>Clear quotes.</strong> You know the price before any work starts.</li>
+        <li><strong>On time.</strong> We turn up when we say we will and keep you updated.</li>
+        <li><strong>Tidy work.</strong> We clean up properly when the job is done.</li>
+        <li><strong>Local.</strong> We work across {site.serviceArea.toLowerCase()}.</li>
+      </ul>
+      <p><a class="button" href="/contact/">Get a quote</a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-8);
+    background: linear-gradient(180deg, var(--color-surface), var(--color-bg));
+  }
+
+  .hero h1 {
+    max-width: 22ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .reasons {
+    padding-left: var(--space-5);
+    max-width: 40rem;
+  }
+
+  .reasons li {
+    margin-bottom: var(--space-2);
+  }
+</style>

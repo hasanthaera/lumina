@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServiceCards from '../../components/ServiceCards.astro';
+import { site } from '../../config/site';
+---
+
+<BaseLayout
+  title="Services"
+  description={`Landscaping, handyman and paving / decking services from ${site.name}. See what we do and ask for a quote.`}
+>
+  <section class="section">
+    <div class="container">
+      <h1>Our services</h1>
+      <p class="lead">
+        {site.name} covers three kinds of work around the home. Choose a service to see the
+        typical jobs we take on.
+      </p>
+      <ServiceCards headingLevel={2} />
+      <p class="services-cta">
+        Not sure which one fits? <a href="/contact/">Tell us about your job</a> and we will let you know.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .services-cta {
+    margin-top: var(--space-6);
+  }
+</style>

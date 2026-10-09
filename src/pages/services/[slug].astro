@@ -1,0 +1,60 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../config/site';
+
+export const getStaticPaths = (() =>
+  site.services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }))) satisfies GetStaticPaths;
+
+const { service } = Astro.props;
+const contactHref = `/contact/?service=${encodeURIComponent(service.slug)}`;
+---
+
+<BaseLayout title={service.label} description={service.summary}>
+  <section class="section">
+    <div class="container service">
+      <p class="breadcrumb"><a href="/services/">Services</a></p>
+      <h1>{service.label}</h1>
+      <p class="lead">{service.summary}</p>
+      {service.description.map((paragraph) => <p>{paragraph}</p>)}
+
+      <h2>Typical jobs</h2>
+      <ul class="jobs">
+        {service.typicalJobs.map((job) => <li>{job}</li>)}
+      </ul>
+      <p class="placeholder-note">
+        Example list. Ask us if your job is not listed; we may still be able to help.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--surface" aria-labelledby="cta-heading">
+    <div class="container">
+      <h2 id="cta-heading">Ready to get started?</h2>
+      <p>Tell us a little about the job and we will get back to you with a quote.</p>
+      <p><a class="button" href={contactHref}>Get a {service.label.toLowerCase()} quote</a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .service {
+    max-width: 48rem;
+  }
+
+  .breadcrumb {
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-2);
+  }
+
+  .jobs {
+    padding-left: var(--space-5);
+  }
+
+  .jobs li {
+    margin-bottom: var(--space-1);
+  }
+</style>

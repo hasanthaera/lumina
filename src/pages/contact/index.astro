@@ -1,0 +1,460 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { enquiryServiceOptions, site } from '../../config/site';
+import { LIMITS } from '../../lib/enquiry';
+
+const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA';
+const turnstileSiteKey =
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || (import.meta.env.DEV ? TURNSTILE_TEST_SITE_KEY : '');
+if (!turnstileSiteKey) {
+  throw new Error('PUBLIC_TURNSTILE_SITE_KEY must be set for production builds (see README).');
+}
+
+const serviceSlugs = site.services.map((s) => s.slug);
+---
+
+<BaseLayout
+  title="Contact us"
+  description={`Contact ${site.name} for a free quote on landscaping, handyman or paving / decking work. Call ${site.phone} or send an enquiry online.`}
+>
+  <script slot="head" is:inline>
+    // Defined before api.js loads so its onload callback always exists.
+    window.luminaTurnstileLoad = function () {
+      function render() {
+        var el = document.getElementById('turnstile');
+        if (!el || !window.turnstile) return;
+        window.turnstile.render(el, {
+          sitekey: el.dataset.sitekey,
+          theme: 'light',
+          // The normal widget is 300px wide; use the compact one on very small screens.
+          size: el.clientWidth < 300 ? 'compact' : 'flexible',
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', render);
+      } else {
+        render();
+      }
+    };
+  </script>
+  <script
+    slot="head"
+    is:inline
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=luminaTurnstileLoad"
+    async
+    defer></script>
+
+  <section class="section">
+    <div class="container contact">
+      <div class="contact__intro">
+        <h1>Contact us</h1>
+        <p class="lead">
+          Tell us about your job and we will get back to you with a quote, usually within one
+          business day.
+        </p>
+        <h2>Other ways to reach us</h2>
+        <ul class="contact__details">
+          <li>Phone: <a href={`tel:${site.phoneHref}`}>{site.phone}</a></li>
+          <li>Email: <a href={`mailto:${site.displayEmail}`}>{site.displayEmail}</a></li>
+          <li>Service area: {site.serviceArea}</li>
+        </ul>
+      </div>
+
+      <div class="contact__form">
+        <h2 id="form-heading">Send an enquiry</h2>
+
+        <div id="enquiry-success" class="notice notice--success" tabindex="-1" hidden>
+          <h3>Thank you, your enquiry has been sent</h3>
+          <p>We will be in touch soon. If your job is urgent, call us on <a href={`tel:${site.phoneHref}`}>{site.phone}</a>.</p>
+        </div>
+
+        <form
+          id="enquiry-form"
+          class="enquiry-form"
+          action="/api/contact"
+          method="post"
+          aria-labelledby="form-heading"
+        >
+          <div id="form-status" class="notice notice--error" role="alert" tabindex="-1" hidden>
+            <p id="form-status-message"></p>
+            <ul id="form-status-list"></ul>
+          </div>
+
+          <div id="delivery-error" class="notice notice--error" role="alert" tabindex="-1" hidden>
+            <p>
+              <strong>Sorry, we could not send your enquiry just now.</strong> Your details are
+              still in the form, so please try again, or contact us directly:
+            </p>
+            <p>
+              Phone: <a href={`tel:${site.phoneHref}`}>{site.phone}</a><br />
+              Email: <a href={`mailto:${site.displayEmail}`}>{site.displayEmail}</a>
+            </p>
+          </div>
+
+          <p class="form-hint">All fields are required unless marked optional.</p>
+
+          <div class="field">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              minlength={LIMITS.nameMin}
+              maxlength={LIMITS.nameMax}
+              aria-describedby="name-error"
+            />
+            <p class="field__error" id="name-error" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              maxlength={LIMITS.emailMax}
+              aria-describedby="email-error"
+            />
+            <p class="field__error" id="email-error" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone <span class="optional">(optional)</span></label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              inputmode="tel"
+              maxlength={LIMITS.phoneMax}
+              pattern="[0-9 +()\-]*"
+              aria-describedby="phone-error"
+            />
+            <p class="field__error" id="phone-error" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="service">Service of interest</label>
+            <select id="service" name="service" required aria-describedby="service-error">
+              <option value="">Choose a service</option>
+              {enquiryServiceOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+            </select>
+            <p class="field__error" id="service-error" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+            <p class="field__hint" id="message-hint">
+              What needs doing, roughly how big the job is, and when you would like it done.
+            </p>
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              required
+              minlength={LIMITS.messageMin}
+              maxlength={LIMITS.messageMax}
+              aria-describedby="message-hint message-error"></textarea>
+            <p class="field__error" id="message-error" hidden></p>
+          </div>
+
+          <div class="hp" aria-hidden="true">
+            <label for="company_website">Leave this field empty</label>
+            <input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="field">
+            <div id="turnstile" class="turnstile" data-sitekey={turnstileSiteKey}></div>
+            <p class="field__error" id="challenge-error" role="alert" hidden></p>
+            <noscript>
+              <p class="field__error">
+                Please turn on JavaScript to complete the spam check, or call us on {site.phone}.
+              </p>
+            </noscript>
+          </div>
+
+          <button class="button" type="submit" id="enquiry-submit">Send enquiry</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    Inline so the spam check and service pre-selection work even if the bundled
+    enhancement script fails to load.
+  -->
+  <script is:inline define:vars={{ serviceSlugs }}>
+    (function () {
+      var select = document.getElementById('service');
+      var slug = new URLSearchParams(window.location.search).get('service');
+      if (select && slug && serviceSlugs.indexOf(slug) !== -1) select.value = slug;
+    })();
+  </script>
+</BaseLayout>
+
+<script>
+  import { FIELDS, validateEnquiry, type EnquiryErrors, type Field } from '../../lib/enquiry';
+
+  type ContactResponse =
+    | { ok: true }
+    | { ok: false; reason: 'validation'; message: string; errors: EnquiryErrors }
+    | { ok: false; reason: 'challenge' | 'delivery' | 'bad-request'; message: string };
+
+  const form = document.querySelector<HTMLFormElement>('#enquiry-form');
+  if (form) enhance(form);
+
+  function enhance(form: HTMLFormElement) {
+    const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+    const submit = $<HTMLButtonElement>('enquiry-submit');
+    const status = $('form-status');
+    const statusMessage = $('form-status-message');
+    const statusList = $('form-status-list');
+    const deliveryError = $('delivery-error');
+    const challengeError = $('challenge-error');
+    const success = $('enquiry-success');
+
+    // Our validator gives consistent messages; the browser's would duplicate them.
+    form.noValidate = true;
+
+    const resetTurnstile = () => {
+      const t = (window as { turnstile?: { reset: () => void } }).turnstile;
+      try {
+        t?.reset();
+      } catch {
+        // widget not rendered yet
+      }
+    };
+
+    function clearMessages() {
+      for (const el of [status, deliveryError, challengeError]) el.hidden = true;
+      statusList.replaceChildren();
+      for (const name of FIELDS) {
+        const input = form.elements.namedItem(name) as HTMLInputElement | null;
+        input?.removeAttribute('aria-invalid');
+        const error = document.getElementById(`${name}-error`);
+        if (error) {
+          error.hidden = true;
+          error.textContent = '';
+        }
+      }
+    }
+
+    function showFieldErrors(errors: EnquiryErrors, message: string) {
+      statusMessage.textContent = message;
+      for (const name of FIELDS) {
+        const text = errors[name as Field];
+        if (!text) continue;
+        const input = form.elements.namedItem(name) as HTMLElement | null;
+        input?.setAttribute('aria-invalid', 'true');
+        const error = document.getElementById(`${name}-error`);
+        if (error) {
+          error.textContent = text;
+          error.hidden = false;
+        }
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = `#${name}`;
+        link.textContent = text;
+        item.append(link);
+        statusList.append(item);
+      }
+      status.hidden = false;
+      status.focus();
+    }
+
+    function showChallengeError(message: string) {
+      challengeError.textContent = message;
+      challengeError.hidden = false;
+      challengeError.scrollIntoView({ block: 'center' });
+    }
+
+    function showDeliveryError() {
+      deliveryError.hidden = false;
+      deliveryError.focus();
+    }
+
+    function setBusy(busy: boolean) {
+      submit.disabled = busy;
+      submit.textContent = busy ? 'Sending…' : 'Send enquiry';
+      form.setAttribute('aria-busy', String(busy));
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (submit.disabled) return;
+      clearMessages();
+
+      const data = new FormData(form);
+      const local = validateEnquiry(
+        Object.fromEntries(FIELDS.map((name) => [name, data.get(name)])),
+      );
+      if (!local.ok) {
+        // Nothing was sent, so the challenge token is still unused.
+        showFieldErrors(local.errors, 'Please fix the following and try again:');
+        return;
+      }
+      if (!data.get('cf-turnstile-response')) {
+        showChallengeError('Please complete the "I am human" check and try again.');
+        return;
+      }
+
+      setBusy(true);
+      let result: ContactResponse | null = null;
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new URLSearchParams(data as unknown as Record<string, string>),
+        });
+        result = (await response.json().catch(() => null)) as ContactResponse | null;
+      } catch {
+        result = null;
+      } finally {
+        setBusy(false);
+      }
+
+      if (result?.ok) {
+        form.hidden = true;
+        success.hidden = false;
+        success.focus();
+        return;
+      }
+
+      // Every token is single-use, so get a fresh one before the next attempt.
+      resetTurnstile();
+      if (result?.reason === 'validation') {
+        showFieldErrors(result.errors, 'Please fix the following and try again:');
+      } else if (result?.reason === 'challenge') {
+        showChallengeError(result.message);
+      } else {
+        showDeliveryError();
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  @media (min-width: 60rem) {
+    .contact {
+      grid-template-columns: 2fr 3fr;
+    }
+  }
+
+  .contact__details {
+    list-style: none;
+    padding: 0;
+  }
+
+  .contact__details li {
+    padding-block: var(--space-1);
+  }
+
+  .enquiry-form {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .form-hint,
+  .field__hint {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+
+  .field {
+    display: grid;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .field label {
+    font-weight: 600;
+  }
+
+  .optional {
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: var(--space-3);
+    border: 2px solid var(--color-muted);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+  }
+
+  .field textarea {
+    resize: vertical;
+  }
+
+  .field [aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+
+  .field__error {
+    margin: 0;
+    color: var(--color-error);
+    font-weight: 600;
+  }
+
+  .turnstile {
+    max-width: 100%;
+  }
+
+  .notice {
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius);
+    border-left: 6px solid;
+  }
+
+  .notice > :last-child {
+    margin-bottom: 0;
+  }
+
+  .notice--error {
+    background: var(--color-error-bg);
+    color: var(--color-error-text);
+    border-color: var(--color-error);
+  }
+
+  .notice--error a {
+    color: var(--color-error-text);
+  }
+
+  .notice--success {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+    border-color: var(--color-brand);
+  }
+
+  .notice--success a {
+    color: var(--color-success-text);
+  }
+
+  .notice h3 {
+    margin-bottom: var(--space-2);
+  }
+
+  /* Honeypot: off-screen for people, still present for bots. */
+  .hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>

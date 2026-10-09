@@ -1,0 +1,84 @@
+---
+import { site } from '../config/site';
+
+interface Props {
+  /** Heading level for card titles, so the outline stays correct on each page. */
+  headingLevel?: 2 | 3;
+}
+
+const { headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+---
+
+<ul class="service-cards">
+  {
+    site.services.map((service) => (
+      <li class="service-card">
+        <Heading class="service-card__title">
+          <a href={`/services/${service.slug}/`}>{service.label}</a>
+        </Heading>
+        <p>{service.summary}</p>
+        <span class="service-card__more" aria-hidden="true">
+          Find out more &rarr;
+        </span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .service-cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 48rem) {
+    .service-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .service-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+  }
+
+  .service-card:hover {
+    border-color: var(--color-brand);
+  }
+
+  /* Whole card is clickable through the title link; focus ring stays on the card. */
+  .service-card__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+  }
+
+  .service-card__title a:focus-visible {
+    outline: none;
+  }
+
+  .service-card__title a:focus-visible::after {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  .service-card p {
+    flex: 1;
+    color: var(--color-muted);
+  }
+
+  .service-card__more {
+    font-weight: 600;
+    color: var(--color-brand);
+  }
+</style>
